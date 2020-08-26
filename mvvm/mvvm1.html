@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no" />
+    <title>simple mvvm</title>
+</head>
+
+<body>
+    <input type="text" id="input" />
+    <div id="view"></div>
+
+    <script>
+        let obj = { data: "" }
+        let input = document.getElementById('input')
+        let view = document.getElementById('view')
+        Object.defineProperty(obj, 'data', {
+            get: function () {
+                console.log('get');
+            },
+            set: function (newValue) {
+                input.value = newValue
+                view.innerText = newValue
+            }
+        }
+        )
+        input.addEventListener('keyup', () => {
+            obj.data = event.target.value
+        })
+    </script>
+</body>
+
+</html>
