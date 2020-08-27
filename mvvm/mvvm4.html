@@ -8,6 +8,7 @@
     <title>simple mvvm4</title>
     <style>
         #app {
+            padding-top: 200px;
             text-align: center;
         }
     </style>
@@ -23,7 +24,27 @@
     </div>
 </body>
 <script>
-
+    class Person {
+        constructor(name, age) {
+            this.name = name;
+            this.age = age
+        }
+        log() {
+            console.log(`I am ${this.name},age is ${this.age}`);
+        }
+    }
+    class Man extends Person {
+        constructor(name, age) {
+            super(name, age);
+            this.gender = 'man';
+        }
+        sayName() {
+            console.log(`I am a ${this.gender},age is ${this.age}, name is ${this.name}`);
+        }
+    }
+    let bob = new Man('Bob', 2);
+    bob.sayName();
+    bob.log('coo', 3)
     class MyVue {
         constructor(options) { // 接收了一个配置对象
             this.$options = options // options 为上面使用时传入的结构体，包括el,data,methods
@@ -32,36 +53,36 @@
             this.$methods = options.methods // this.$methods = {increment: function(){}}
 
             this._binding = {}
-            this._obsever(this.$data)
-            this._complie(this.$el)
+            this._observer(this.$data)
+            this._compile(this.$el)
         }
-        _obsever(data) { // 数据劫持：更新数据
+        _observer(data) { // 数据劫持：更新数据
             let _this = this
             let handler = {
                 get(target, key) {
                     return target[key]; // 获取该对象上key的值
                 },
                 set(target, key, newValue) {
-                    let res = Reflect.set(target, key, newValue); // 将新值分配给属性的函数
+                    // let res = Reflect.set(target, key, newValue); // 将新值分配给属性的函数
+                    target[key] = newValue
                     _this._binding[key].map(item => {
                         item.update();
                     });
-                    return res;
+                    return true;
                 }
             };
             // 把代理器返回的对象代理到this.$data，即this.$data是代理后的对象，外部每次对this.$data进行操作时，实际上执行的是这段代码里handler对象上的方法
             this.$data = new Proxy(data, handler);
         }
-        _complie(el) { // el 为id为app的Element元素，也就是我们的根元素
+        _compile(el) { // el 为id为app的Element元素，也就是我们的根元素 //实现了双向绑定
             let _this = this
             let nodes = Array.prototype.slice.call(el.children) // 将为数组转化为真正的数组
             nodes.map(node => {
-                if (node.children.length && node.children.length > 0) this._complie(node)
+                if (node.children.length && node.children.length > 0) this._compile(node)
                 if (node.hasAttribute('v-click')) { // 如果有v-click属性，我们监听它的onclick事件，触发increment事件，即number++
                     let attrVal = node.getAttribute('v-click')
                     node.onclick = _this.$methods[attrVal].bind(_this.$data) // bind是使data的作用域与method函数的作用域保持一致
                 }
-
                 // 如果有v-model属性，并且元素是INPUT或者TEXTAREA，我们监听它的input事件
                 if (node.hasAttribute('v-model') && (node.tagName === 'INPUT' || node.tagName === 'TEXTAREA')) {
                     let attrVal = node.getAttribute('v-model')
@@ -108,6 +129,8 @@
 
 
     window.onload = () => { // 当文档内容完全加载完成会触发该事件,避免获取不到对象的情况
+
+        debugger
         new MyVue({
             el: '#app',
             data: {
