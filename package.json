@@ -1,0 +1,23 @@
+{
+  "name": "method-or-explain",
+  "version": "1.0.0",
+  "description": "some methods that good for work efficiency  or some explains help understanding",
+  "main": "InterfaceExtendingInterfaces.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "new":"plop"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuych/method-or-explain.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xuych/method-or-explain/issues"
+  },
+  "homepage": "https://github.com/xuych/method-or-explain#readme",
+  "devDependencies": {
+    "plop": "^2.7.4"
+  }
+}

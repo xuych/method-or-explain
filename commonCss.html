@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  </style>
+</head>
+
+<body>
+  <button id="download">download</button>
+  <script>
+    function download(href, filename = '') {
+      const a = document.createElement('a')
+      a.download = filename
+      a.href = href
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    }
+
+    function downloadFile(url, filename = '') {
+      fetch(url, {
+        headers: new Headers({
+          Origin: location.origin,
+        }),
+        mode: 'cors',
+      })
+        .then(res => res.blob())
+        .then(blob => {
+          const blobUrl = window.URL.createObjectURL(blob)
+          download(blobUrl, filename)
+          window.URL.revokeObjectURL(blobUrl)
+        })
+    }
+    document.getElementById("download").onclick = function () { downloadFile('cnblogs.com/zhaoxiaokai/p/6295190.html', 'test') }
+
+  </script>
+</body>
+
+</html>

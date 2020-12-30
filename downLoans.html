@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  </style>
+</head>
+
+<body>
+  <button id="download">download</button>
+  <button onclick="hdlDownload()">download</button>
+  <script>
+    function download(href, filename = '') {
+      const a = document.createElement('a')
+      a.download = filename
+      a.href = href
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    }
+
+    function downloadFile(url, filename = '') {
+      fetch(url, {
+        headers: new Headers({
+          Origin: location.origin,
+        }),
+        mode: 'cors',
+      })
+        .then(res => res.blob())
+        .then(blob => {
+          const blobUrl = window.URL.createObjectURL(blob)
+          download(blobUrl, filename)
+          window.URL.revokeObjectURL(blobUrl)
+        })
+    }
+    document.getElementById("download").onclick = function () { downloadFile('cnblogs.com/zhaoxiaokai/p/6295190.html', 'test') }
+    function hdlDownload() {
+      console.log('download start');
+      var _form = document.createElement('form');
+      // _form.action = 'https://tse3-mm.cn.bing.net/th/id/OIP.wgeIdDmi8WCetA2t39roBAHaDx?pid=Api&rs=1'
+      _form.action = './img/img_1.png'
+      _form.method = 'get'
+      document.getElementsByTagName('body')[0].appendChild(_form)
+      _form.submit()
+      console.log('download done');
+    }
+  </script>
+</body>
+
+</html>
